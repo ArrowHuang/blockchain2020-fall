@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+    <title>FinalProject</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<!--    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>-->
+    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
+    <script src="https://drive.google.com/uc?export=view&id=1drYiooJ7BV9FXi98Vxd_3uQOMD2iC-ly"></script> <!-- eth-abi-decoder script-->
+
+</head>
+<body>
+<div class="ui top fixed inverted massive menu">
+    <div class="item">FinalProject</div>
+</div>
+<div class="ui stackable three column grid" style="padding-top: 100px;">
+    <div class="column">
+        <h2 class="ui header">
+            <i class="file icon"></i>
+            <div class="content">
+                Create FoodLog
+            </div>
+        </h2>
+        <div class="ui divider"></div>
+        <div class="ui large middle aligned divided list">
+            <div class="item"><div class="content">Logno  </div><div class="ui right floated content input"><input type="text" value="123456"              id="s1Logno"   placeholder="7477..."></div></div>
+            <div class="item"><div class="content">Loghash</div><div class="ui right floated content input"><input type="text" value="1234adsfk"           id="s1Loghash" placeholder="256-bit hash"></div></div>
+            <div class="item"><div class="content">Logname</div><div class="ui right floated content input"><input type="text" value="green tea"           id="s1Logname" placeholder="green tea"></div></div>
+            <div class="item"><div class="content">Logorg </div><div class="ui right floated content input"><input type="text" value="drliao"              id="s1Logorg"  placeholder="8Dtea"></div></div>
+            <div class="item"><div class="content">Logdate</div><div class="ui right floated content input"><input type="text" value="2018-04-03 18:41:01" id="s1Logdate" placeholder="2018-04-03 18:41:01"></div></div>
+        </div>
+        <button class="ui fluid primary button" id="s1SubmitBtn">
+            Submit
+        </button>
+    </div>
+
+    <div class="column">
+        <h2 class="ui header">
+            <i class="file icon"></i>
+            <div class="content">
+                Create FoodLogSection
+            </div>
+        </h2>
+        <div class="ui divider"></div>
+        <div class="ui large middle aligned divided list">
+            <div class="item"><div class="content">Logno</div><div class="ui right floated content input"><input type="text" value="123456"              id="s2Logno" placeholder="7477..."></div></div>
+            <div class="item"><div class="content">Title</div><div class="ui right floated content input"><input type="text" value="green tea(washing)"  id="s2Title" placeholder="green tea(washing)"></div></div>
+            <div class="item"><div class="content">Begin</div><div class="ui right floated content input"><input type="text" value="2018-03-23 11:52:31" id="s2Begin" placeholder="2018-03-23 11:52:31"></div></div>
+            <div class="item"><div class="content">End  </div><div class="ui right floated content input"><input type="text" value="2018-03-23 11:54:40" id="s2End"   placeholder="2018-03-23 11:54:40"></div></div>
+        </div>
+        <button class="ui fluid primary button" id="s2SubmitBtn">
+            Submit
+        </button>
+    </div>
+
+    <div class="column">
+        <h2 class="ui header">
+            <i class="filter icon"></i>
+            <div class="content">
+                Query
+            </div>
+        </h2>
+        <div class="ui divider"></div>
+        <div class="ui large middle aligned divided list">
+            <div class="item"><div class="content">Logno    </div><div class="ui right floated content input"><input type="text" value="123456"      id="s3Logno"     placeholder="7477..."></div></div>
+            <div class="item"><div class="content">EventType</div><div class="ui right floated content input"><input type="text" value="allEvents"   id="s3EventType" placeholder="allEvents, FoodContent, FoodItem, FoodSection..."></div></div>
+            <div class="item"><div class="content">FromBlock</div><div class="ui right floated content input"><input type="text" value="173259"      id="s3FromBlock" placeholder="0"></div></div>
+            <div class="item"><div class="content">ToBlock  </div><div class="ui right floated content input"><input type="text" value="latest"      id="s3ToBlock"   placeholder="latest or 173242"></div></div>
+        </div>
+        <button class="ui fluid primary button" id="s3SubmitBtn">
+            Submit
+        </button>
+    </div>
+
+</div>
+<div class="ui grid">
+    <div class="sixteen wide column">
+        <h2 class="ui header">
+            <i class="th list icon"></i>
+            <div class="content">
+                Result
+            </div>
+        </h2>
+        <div class="ui divider"></div>
+        <div class="ui large list" id="result">
+
+        </div>
+    </div>
+</div>
+<script>
+            const abi = [
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "logno",
+				"type": "uint256"
+			},
+			{
+				"indexed": true,
+				"internalType": "string",
+				"name": "logname",
+				"type": "string"
+			},
+			{
+				"indexed": true,
+				"internalType": "string",
+				"name": "logorg",
+				"type": "string"
+			}
+		],
+		"name": "FoodContent",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "logno",
+				"type": "uint256"
+			},
+			{
+				"indexed": true,
+				"internalType": "string",
+				"name": "url",
+				"type": "string"
+			},
+			{
+				"indexed": true,
+				"internalType": "string",
+				"name": "filehash",
+				"type": "string"
+			}
+		],
+		"name": "FoodImage",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "string",
+				"name": "url",
+				"type": "string"
+			},
+			{
+				"indexed": true,
+				"internalType": "string",
+				"name": "oldhash",
+				"type": "string"
+			},
+			{
+				"indexed": true,
+				"internalType": "string",
+				"name": "newhash",
+				"type": "string"
+			}
+		],
+		"name": "FoodImageReplace",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "logno",
+				"type": "uint256"
+			},
+			{
+				"indexed": true,
+				"internalType": "string",
+				"name": "loghash",
+				"type": "string"
+			},
+			{
+				"indexed": true,
+				"internalType": "string",
+				"name": "logdate",
+				"type": "string"
+			}
+		],
+		"name": "FoodItem",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "logno",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "title",
+				"type": "string"
+			},
+			{
+				"indexed": true,
+				"internalType": "string",
+				"name": "begin",
+				"type": "string"
+			},
+			{
+				"indexed": true,
+				"internalType": "string",
+				"name": "end",
+				"type": "string"
+			}
+		],
+		"name": "FoodSection",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "logno",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "loghash",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "logname",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "logorg",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "logdate",
+				"type": "string"
+			}
+		],
+		"name": "FoodLog",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "logno",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "url",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "filehash",
+				"type": "string"
+			}
+		],
+		"name": "FoodLogImage",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "logno",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "title",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "begin",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "end",
+				"type": "string"
+			}
+		],
+		"name": "FoodLogSection",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+];      
+
+        function upload(Logno, Logname, Logorg, Logdate, ImageUrl){
+            var result_return = "";
+            var result_return_image = "";
+            FoodLogTransaction(Logno, Logname, Logorg, Logdate, function(result){
+                result_return = result["blockNumber"].toString();
+                console.log(result_return);
+                if(result['status']){
+                    FoodLogImageTransaction(Logno, ImageUrl, function(result){
+                        result_return_image = result["blockNumber"].toString();
+                        console.log(result_return_image);
+                        alert("成功上傳\nImage BlockNumber為" + result_return_image + "\nLog BlockNumber為"+result_return+"\nLogno: "+Logno+"\n產品名稱: "+Logname+"\n產出組織: "+Logorg+"\n生產日期: "+Logdate);
+                    });
+                }                
+            });
+        }
+
+        function upload_act(Logno, Logname, Logorg, Logdate, Logactivity){
+            var result_all = "";
+            var Logactivity_sub = Logactivity.toString().split("$$##");
+            for (var i = 0; i < Logactivity_sub.length; i++) {
+                if(Logactivity_sub[i].length !=0){
+                    var Logacttitle = Logactivity_sub[i].split("$$Begin Time:")[0].split("Activity Name:")[1];
+                    var Logactbegin = Logactivity_sub[i].split("$$Begin Time:")[1].split("$$End Time:")[0];
+                    var Logactend = Logactivity_sub[i].split("$$End Time:")[1];
+                    
+                    FoodLogSectionTransaction(Logno, Logacttitle, Logactbegin, Logactend, function(result){
+                        const result_return_tmp =  result["blockNumber"].toString();
+                        result_all = result_all + result_return_tmp + "\n";
+                        // console.log(result_all);
+                        alert("成功上傳，BlockNumber為"+result_return_tmp+"\nLogno: "+Logno+"\n作業名稱: "+Logacttitle+"\n開始日期: "+Logactbegin+"\n結束日期: "+Logactbegin);
+                    });
+
+                }
+            }
+        }
+
+        // function itera_act(Logno, Logname, Logorg, Logdate, Logactivity, result_all){
+            
+        // }
+
+        const CONTRACT_ADDRESS = '0xA4fafbE0ea4823e262b4916EF93CC5A6306A5DBc';
+        const ACCOUNT_ADDRESS = '0x7CbEb723CA0788af6549110fb2a9816ED0BAa1a6';
+        const PRIVATE_KEY = '0xab09158d9a817633c28c74b6e6c1bf34c26ffadc1a961870beaeef38b0753495';
+
+        function FoodLogTransaction(Logno, Logname, Logorg, Logdate, callback){
+            var bl = 1;
+            const web3 = new Web3("http://foodchain-node3.etherhost.org:22003");
+            const contract = new web3.eth.Contract(abi, "0xA4fafbE0ea4823e262b4916EF93CC5A6306A5DBc");
+            var Lognohash = sha256(Logno);
+            var encoded_data = contract.methods.FoodLog(Logno, Lognohash, Logname, Logorg, Logdate).encodeABI();
+            const accountNonce = '0x' + (web3.eth.getTransactionCount(ACCOUNT_ADDRESS) + 1).toString(16);
+            var tx = {
+                nouce: accountNonce,
+                from: ACCOUNT_ADDRESS,
+                to: CONTRACT_ADDRESS,
+                gas: 100000,
+                data: encoded_data,
+            }
+
+            web3.eth.accounts.signTransaction(tx, PRIVATE_KEY)
+            .then(signed => {
+                web3.eth.sendSignedTransaction(signed.rawTransaction)
+                .once('receipt', function(receipt){
+                    callback(receipt);
+                })
+                .catch((err) =>  alert("上傳失敗"));
+                })
+            .catch((err) =>  alert("上傳失敗"));
+        }
+
+        function FoodLogImageTransaction(Logno, Url, callback){
+            const web3 = new Web3("http://foodchain-node3.etherhost.org:22003");
+            const contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
+            var Filehash = sha256(Url);
+            var encoded_data = contract.methods.FoodLogImage(Logno, Url, Filehash).encodeABI();
+            const accountNonce = '0x' + (web3.eth.getTransactionCount(ACCOUNT_ADDRESS) + 1).toString(16);
+            var tx = {
+                nouce: accountNonce,
+                from: ACCOUNT_ADDRESS,
+                to: CONTRACT_ADDRESS,
+                gas: 100000,
+                data: encoded_data,
+            }
+            web3.eth.accounts.signTransaction(tx, PRIVATE_KEY)
+            .then(signed => {
+                web3.eth.sendSignedTransaction(signed.rawTransaction)
+                .once('receipt', function(receipt){
+                    callback(receipt);
+                })
+                .catch((err) =>  alert("上傳失敗"));
+                })
+            .catch((err) =>  alert("上傳失敗"));
+        }
+
+        function FoodLogSectionTransaction(Logno, Title, Begin, End, callback){
+            const web3 = new Web3("http://foodchain-node3.etherhost.org:22003");
+            const contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
+            var encoded_data = contract.methods.FoodLogSection(Logno, Title, Begin, End).encodeABI();
+            const accountNonce = '0x' + (web3.eth.getTransactionCount(ACCOUNT_ADDRESS) + 1).toString(16);
+            var tx = {
+                nouce: accountNonce,
+                from: ACCOUNT_ADDRESS,
+                to: CONTRACT_ADDRESS,
+                gas: 100000,
+                data: encoded_data,
+            }
+            web3.eth.accounts.signTransaction(tx, PRIVATE_KEY)
+            .then(signed => {
+                web3.eth.sendSignedTransaction(signed.rawTransaction)
+                .once('receipt', function(receipt){
+                    callback(receipt);
+                })
+                .catch((err) =>  alert("上傳失敗"));
+                })
+            .catch((err) =>  alert("上傳失敗"));
+        }
+
+        function eventQuery(log, eventtype, from, to){
+            const web3 = new Web3("http://foodchain-node2.etherhost.org:22002");
+            const contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
+            var input = "";
+            addABI(abi);
+            const START_BLOCK = 0;
+            const END_BLOCK = 'latest';
+            contract.getPastEvents(eventtype,
+            {
+                filter : {logno: log},
+                fromBlock: from,
+                toBlock: to
+            })
+            .then(function(events){
+                $("#result").empty();
+                console.log(events);
+                for (const ev of events){
+                    // get transactionhash of each event
+                    web3.eth.getTransaction(ev.transactionHash)
+                        .then((transaction) => {
+                            // decode input data
+                            const result = decodeMethod(transaction.input);
+                            input = "";
+                            for ( i = 1; i < result.params.length; i++){
+                                input += result.params[i].name + ":" + result.params[i].value + ", ";
+                            }
+                        }).then(function(){
+                            $("#result").prepend(
+                                "<div class=\"item\">" +
+                                    "<div class=\"ui green label\">" + ev.event + "</div>" +
+                                    "<b>BlockNumber </b>" + ev.blockNumber + " " +
+                                    "<b>TransactionHash </b>" + ev.transactionHash + "<br>" +
+                                    input + " " +
+                                "</div>"
+                            );
+                        });
+                }
+            })
+            .catch((err) => console.error(err));
+        }
+
+
+    function sha256(ascii) {
+    function rightRotate(value, amount) {
+        return (value>>>amount) | (value<<(32 - amount));
+    };
+
+    var mathPow = Math.pow;
+    var maxWord = mathPow(2, 32);
+    var lengthProperty = 'length'
+    var i, j; // Used as a counter across the whole file
+    var result = ''
+
+    var words = [];
+    var asciiBitLength = ascii[lengthProperty]*8;
+
+    //* caching results is optional - remove/add slash from front of this line to toggle
+    // Initial hash value: first 32 bits of the fractional parts of the square roots of the first 8 primes
+    // (we actually calculate the first 64, but extra values are just ignored)
+    var hash = sha256.h = sha256.h || [];
+    // Round constants: first 32 bits of the fractional parts of the cube roots of the first 64 primes
+    var k = sha256.k = sha256.k || [];
+    var primeCounter = k[lengthProperty];
+    /*/
+    var hash = [], k = [];
+    var primeCounter = 0;
+    //*/
+
+    var isComposite = {};
+    for (var candidate = 2; primeCounter < 64; candidate++) {
+        if (!isComposite[candidate]) {
+            for (i = 0; i < 313; i += candidate) {
+                isComposite[i] = candidate;
+            }
+            hash[primeCounter] = (mathPow(candidate, .5)*maxWord)|0;
+            k[primeCounter++] = (mathPow(candidate, 1/3)*maxWord)|0;
+        }
+    }
+
+    ascii += '\x80' // Append Ƈ' bit (plus zero padding)
+    while (ascii[lengthProperty]%64 - 56) ascii += '\x00' // More zero padding
+    for (i = 0; i < ascii[lengthProperty]; i++) {
+        j = ascii.charCodeAt(i);
+        if (j>>8) return; // ASCII check: only accept characters in range 0-255
+        words[i>>2] |= j << ((3 - i)%4)*8;
+    }
+    words[words[lengthProperty]] = ((asciiBitLength/maxWord)|0);
+    words[words[lengthProperty]] = (asciiBitLength)
+
+    // process each chunk
+    for (j = 0; j < words[lengthProperty];) {
+        var w = words.slice(j, j += 16); // The message is expanded into 64 words as part of the iteration
+        var oldHash = hash;
+        // This is now the undefinedworking hash", often labelled as variables a...g
+        // (we have to truncate as well, otherwise extra entries at the end accumulate
+        hash = hash.slice(0, 8);
+
+        for (i = 0; i < 64; i++) {
+            var i2 = i + j;
+            // Expand the message into 64 words
+            // Used below if
+            var w15 = w[i - 15], w2 = w[i - 2];
+
+            // Iterate
+            var a = hash[0], e = hash[4];
+            var temp1 = hash[7]
+                + (rightRotate(e, 6) ^ rightRotate(e, 11) ^ rightRotate(e, 25)) // S1
+                + ((e&hash[5])^((~e)&hash[6])) // ch
+                + k[i]
+                // Expand the message schedule if needed
+                + (w[i] = (i < 16) ? w[i] : (
+                        w[i - 16]
+                        + (rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15>>>3)) // s0
+                        + w[i - 7]
+                        + (rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2>>>10)) // s1
+                    )|0
+                );
+            // This is only used once, so *could* be moved below, but it only saves 4 bytes and makes things unreadble
+            var temp2 = (rightRotate(a, 2) ^ rightRotate(a, 13) ^ rightRotate(a, 22)) // S0
+                + ((a&hash[1])^(a&hash[2])^(hash[1]&hash[2])); // maj
+
+            hash = [(temp1 + temp2)|0].concat(hash); // We don't bother trimming off the extra ones, they're harmless as long as we're truncating when we do the slice()
+            hash[4] = (hash[4] + temp1)|0;
+        }
+
+        for (i = 0; i < 8; i++) {
+            hash[i] = (hash[i] + oldHash[i])|0;
+        }
+    }
+
+    for (i = 0; i < 8; i++) {
+        for (j = 3; j + 1; j--) {
+            var b = (hash[i]>>(j*8))&255;
+            result += ((b < 16) ? 0 : '') + b.toString(16);
+        }
+    }
+    return result;
+};
+
+
+    </script>
+</body>
+</html>

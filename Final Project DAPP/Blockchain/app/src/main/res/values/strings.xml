@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Blockchain</string>
+    <string name="main_word">Mobile PLTT</string>
+    <string name="main_jump_to_first">Create New Chain</string>
+    <string name="main_jump_to_second">Check All PLTT Chain</string>
+    <string name="back_to_main">Back</string>\
+    <string name="upload">Upload</string>
+    <string name="log_no">LOGNO:</string>
+    <string name="product_name">產品名稱:</string>
+    <string name="product_org">產出組織:</string>
+    <string name="product_date">產出日期:</string>
+    <string name="product_available_date">有效日期:</string>
+    <string name="product_num">產出數量:</string>
+    <string name="product_left_num">剩餘數量:</string>
+    <string name="add_activity">ADD SECTION</string>
+
+    <dimen name="text_main_word_size">40sp</dimen>
+    <dimen name="test_backmain_word_size">25sp</dimen>
+    <dimen name="product_word_size">20sp</dimen>
+    <string name="title_activity_maps">Map</string>
+
+</resources>
