@@ -18,4 +18,8 @@
 ![image](https://github.com/ArrowHuang/blockchain2020-fall/blob/master/Final%20Project%20DAPP/ScreenShot/fig4.png)
 
 ![image](https://github.com/ArrowHuang/blockchain2020-fall/blob/master/Final%20Project%20DAPP/ScreenShot/fig5.png)
+
+![image](https://github.com/ArrowHuang/blockchain2020-fall/blob/master/Final%20Project%20DAPP/ScreenShot/fig6.png)
+
+![image](https://github.com/ArrowHuang/blockchain2020-fall/blob/master/Final%20Project%20DAPP/ScreenShot/fig7.png)
   
