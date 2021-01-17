@@ -8,8 +8,11 @@
 * 按照縣市顯示區塊鏈  
 
 ## Setup
-First you should go to get your Google Maps API Keys for Google Map Service.
-Second, download and put these ![three files](https://drive.google.com/drive/folders/1u1fUgOHoKhJKFjydSOeP_GD10lPy-MwF?usp=sharing) in your smartphone.
+* First you should go to get your Google Maps API Keys for Google Map Service
+
+* Second, download and put these [three files](https://drive.google.com/drive/folders/1u1fUgOHoKhJKFjydSOeP_GD10lPy-MwF?usp=sharing) in your smartphone
+
+* Thirdly, parse the download file path in your smart phone into /Blockchain/app/src/main/java/com/example/blockchain/CheckActivity.java
 
 ## Screenshots
 
