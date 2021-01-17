@@ -12,7 +12,7 @@
 
 * Second, download and put these [three files](https://drive.google.com/drive/folders/1u1fUgOHoKhJKFjydSOeP_GD10lPy-MwF?usp=sharing) in your smartphone
 
-* Thirdly, parse the download file path in your smart phone into /Blockchain/app/src/main/java/com/example/blockchain/CheckActivity.java
+* Third, parse the download file path in your smart phone into /Blockchain/app/src/main/java/com/example/blockchain/CheckActivity.java
 
 ## Screenshots
 
